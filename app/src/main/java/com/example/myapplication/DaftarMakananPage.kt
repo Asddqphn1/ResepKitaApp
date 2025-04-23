@@ -163,45 +163,53 @@ fun ResepKitaApp(
             // Grid daftar resep
             Text("Daftar Resep", fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxHeight()
-            ) {
-                items(safeMakanan){item ->
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(8.dp)) {
-                            // Gambar placeholder
-                            AsyncImage(
-                                model = item.thumbniail,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .height(100.dp)
-                                    .fillMaxWidth()
-                                    .background(Color.Gray)
-                            )
+            if(safeMakanan.isEmpty()){
+                CircularProgressIndicator()
+            }else {
 
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Text(item.namaMakanan ?: "Tanpa Nama", fontWeight = FontWeight.SemiBold)
-                            Row {
-                                Icon(
-                                    Icons.Default.Star,
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxHeight()
+                ) {
+                    items(safeMakanan) { item ->
+                        Card(
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(8.dp)) {
+                                // Gambar placeholder
+                                AsyncImage(
+                                    model = item.thumbniail,
                                     contentDescription = null,
-                                    tint = Color.Yellow,
-                                    modifier = Modifier.size(16.dp)
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .height(100.dp)
+                                        .fillMaxWidth()
+                                        .background(Color.Gray)
                                 )
-                                Text("4.5", color = Color.Gray)
+
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(
+                                    item.namaMakanan ?: "Tanpa Nama",
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Row {
+                                    Icon(
+                                        Icons.Default.Star,
+                                        contentDescription = null,
+                                        tint = Color.Yellow,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text("4.5", color = Color.Gray)
+                                }
                             }
                         }
-                        }
+                    }
                 }
             }
         }
