@@ -88,7 +88,7 @@ fun ResepKitaApp(
             BottomNavigation (backgroundColor = Color(0xFFFFA726)) {
                 BottomNavigationItem(icon = { Icon(Icons.Default.Home, null) }, label = { Text("Beranda") }, selected = true, onClick = {})
                 BottomNavigationItem(icon = { Icon(Icons.Default.Search, null) }, label = { Text("Cari") }, selected = false, onClick = {})
-                BottomNavigationItem(icon = { Icon(Icons.Default.Favorite, null) }, label = { Text("Tersimpan") }, selected = false, onClick = {})
+                BottomNavigationItem(icon = { Icon(Icons.Default.Favorite, null) }, label = { Text("Disukai") }, selected = false, onClick = {})
                 BottomNavigationItem(icon = { Icon(Icons.Default.Person, null) }, label = { Text("Profil") }, selected = false, onClick = {})
             }
         }
