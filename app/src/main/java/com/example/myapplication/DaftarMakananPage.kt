@@ -1,10 +1,14 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -50,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,27 +64,46 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
 import com.example.myapplication.models.DaftarMakan
+import com.example.myapplication.models.MakananDisukai
 import com.example.myapplication.viewmodels.DaftarMakananView
 import com.example.myapplication.viewmodels.FilterMakananView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.database
 
 class DaftarMakananPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
         setContent {
             ResepKitaApp()
         }
     }
 }
 
+//fun WriteSuka (gambar : String, namaMakana : String, userId : String){
+//    var database : DatabaseReference = Firebase.database.reference
+//    val makanansuka = MakananDisukai(gambar, namaMakana)
+//    database.child("Users").child(userId).child("Favorite").setValue(makanansuka)
+//}
+
 @Composable
 fun ResepKitaApp(
+    makananDisukai: MakananDisukai = viewModel(),
     viewModel: DaftarMakananView = viewModel(),
     filterViewModel: FilterMakananView = viewModel()
 ) {
     val categories by viewModel.category.collectAsState()
     val makanan by filterViewModel.filterMakaan.collectAsState()
     val safeMakanan = makanan ?: emptyList()
+    val context = LocalContext.current
+    val auth : FirebaseAuth = Firebase.auth
+    val userid = auth.currentUser?.uid
+
+
+
 
     Scaffold(
         topBar = {
@@ -88,7 +113,10 @@ fun ResepKitaApp(
             BottomNavigation (backgroundColor = Color(0xFFFFA726)) {
                 BottomNavigationItem(icon = { Icon(Icons.Default.Home, null) }, label = { Text("Beranda") }, selected = true, onClick = {})
                 BottomNavigationItem(icon = { Icon(Icons.Default.Search, null) }, label = { Text("Cari") }, selected = false, onClick = {})
-                BottomNavigationItem(icon = { Icon(Icons.Default.Favorite, null) }, label = { Text("Disukai") }, selected = false, onClick = {})
+                BottomNavigationItem(icon = { Icon(Icons.Default.Favorite, null) }, label = { Text("Disukai") }, selected = false, onClick = {
+                    val intent = Intent(context, DaftarFavorite::class.java)
+                    context.startActivity(intent)
+                })
                 BottomNavigationItem(icon = { Icon(Icons.Default.Person, null) }, label = { Text("Profil") }, selected = false, onClick = {})
             }
         }
@@ -163,6 +191,8 @@ fun ResepKitaApp(
             // Grid daftar resep
             Text("Daftar Resep", fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             if(safeMakanan.isEmpty()){
                 CircularProgressIndicator()
             }else {
@@ -176,6 +206,7 @@ fun ResepKitaApp(
                 ) {
                     items(safeMakanan) { item ->
                         Card(
+
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -198,7 +229,9 @@ fun ResepKitaApp(
                                     item.namaMakanan ?: "Tanpa Nama",
                                     fontWeight = FontWeight.SemiBold
                                 )
+                                Spacer(modifier = Modifier.height(15.dp))
                                 Row {
+
                                     Icon(
                                         Icons.Default.Star,
                                         contentDescription = null,
@@ -206,6 +239,28 @@ fun ResepKitaApp(
                                         modifier = Modifier.size(16.dp)
                                     )
                                     Text("4.5", color = Color.Gray)
+                                    Spacer(modifier = Modifier.width(80.dp))
+
+                                    Icon(
+                                        Icons.Default.Favorite,
+
+                                        modifier = Modifier
+                                            .size(16.dp)
+                                            .clickable {
+
+                                                if (userid != null) {
+                                                    makananDisukai.WriteSuka(userid,
+                                                        item.thumbniail.toString(), item.namaMakanan.toString(), item.idMakanan.toString())
+                                                }
+
+                                                Toast.makeText(context, "Disukai", Toast.LENGTH_SHORT).show()
+
+
+                                            },
+                                        contentDescription = null,
+
+
+                                    )
                                 }
                             }
                         }
@@ -216,8 +271,8 @@ fun ResepKitaApp(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun Preview(){
-    ResepKitaApp()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview(){
+//    ResepKitaApp()
+//}
