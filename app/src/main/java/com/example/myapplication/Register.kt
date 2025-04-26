@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -76,6 +77,7 @@ fun RegisterPage (authModel: AuthModel) {
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var konfirmasiPassword by remember { mutableStateOf("") }
+    var lokasi by remember { mutableStateOf("") }
     val context = LocalContext.current
 
 
@@ -207,12 +209,29 @@ fun RegisterPage (authModel: AuthModel) {
                     )
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
+                //lokasi
+                OutlinedTextField(
+                    value = lokasi,
+                    onValueChange = { lokasi = it },
+                    label = { Text("Lokasi anda (Kota)") },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFFFFA726),
+                        focusedTextColor = Color.Black,
+                        focusedPlaceholderColor = Color(0xFFFFA726)
+                    )
+                )
+                Spacer(modifier = Modifier.height(24.dp))
                 // Daftar Button
                 Button(
                     onClick = {
-                        authModel.signUp(email,name,password,konfirmasiPassword){sukses, pesan ->
+                        authModel.signUp(email,name,password,konfirmasiPassword,lokasi){sukses, pesan ->
                             if (sukses){
                                 val intent = Intent(context, MainActivity::class.java)
                                 context.startActivity(intent)

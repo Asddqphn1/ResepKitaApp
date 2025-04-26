@@ -1,5 +1,6 @@
-package com.example.myapplication.models
+package com.example.myapplication.response
 
+import com.example.myapplication.models.ListMakananCategory
 import com.google.gson.annotations.SerializedName
 
 data class ResponseFilterMakanan(

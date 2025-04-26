@@ -58,6 +58,8 @@ fun Greeting(authModel: AuthModel) {
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
 
+
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Background dengan efek blur
         Image(

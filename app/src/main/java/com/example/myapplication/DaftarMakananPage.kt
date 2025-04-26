@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -32,13 +30,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
@@ -51,6 +49,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,80 +58,109 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import coil.compose.AsyncImage
-
-import com.example.myapplication.models.DaftarMakan
 import com.example.myapplication.models.MakananDisukai
 import com.example.myapplication.viewmodels.DaftarMakananView
 import com.example.myapplication.viewmodels.FilterMakananView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.database
+
 
 class DaftarMakananPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.hide(WindowInsetsCompat.Type.navigationBars())
+        controller.hide(WindowInsetsCompat.Type.statusBars())
+
+
+
         setContent {
             ResepKitaApp()
         }
     }
 }
 
-//fun WriteSuka (gambar : String, namaMakana : String, userId : String){
-//    var database : DatabaseReference = Firebase.database.reference
-//    val makanansuka = MakananDisukai(gambar, namaMakana)
-//    database.child("Users").child(userId).child("Favorite").setValue(makanansuka)
-//}
-
 @Composable
 fun ResepKitaApp(
     makananDisukai: MakananDisukai = viewModel(),
     viewModel: DaftarMakananView = viewModel(),
-    filterViewModel: FilterMakananView = viewModel()
+    filterViewModel: FilterMakananView = viewModel(),
 ) {
     val categories by viewModel.category.collectAsState()
     val makanan by filterViewModel.filterMakaan.collectAsState()
-    val safeMakanan = makanan ?: emptyList()
+    val safeMakanan = makanan
     val context = LocalContext.current
     val auth : FirebaseAuth = Firebase.auth
     val userid = auth.currentUser?.uid
 
+    // State untuk pencarian
+    val searchQuery = remember { mutableStateOf("") }
 
-
+    // Filter makanan berdasarkan nama
+    val filteredMakanan = safeMakanan.filter { item ->
+        item.namaMakanan?.contains(searchQuery.value, ignoreCase = true) == true
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("🍽️ Resep Kita") }, backgroundColor = Color(0xFFFFA726))
         },
         bottomBar = {
-            BottomNavigation (backgroundColor = Color(0xFFFFA726)) {
-                BottomNavigationItem(icon = { Icon(Icons.Default.Home, null) }, label = { Text("Beranda") }, selected = true, onClick = {})
-                BottomNavigationItem(icon = { Icon(Icons.Default.Search, null) }, label = { Text("Cari") }, selected = false, onClick = {})
-                BottomNavigationItem(icon = { Icon(Icons.Default.Favorite, null) }, label = { Text("Disukai") }, selected = false, onClick = {
-                    val intent = Intent(context, DaftarFavorite::class.java)
-                    context.startActivity(intent)
-                })
-                BottomNavigationItem(icon = { Icon(Icons.Default.Person, null) }, label = { Text("Profil") }, selected = false, onClick = {})
+            BottomNavigation(backgroundColor = Color(0xFFFFA726)) {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Home, null) },
+                    label = { Text("Beranda") },
+                    selected = true,
+                    onClick = {}
+                )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Search, null) },
+                    label = { Text("Cari") },
+                    selected = false,
+                    onClick = {}
+                )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Favorite, null) },
+                    label = { Text("Disukai") },
+                    selected = false,
+                    onClick = {
+                        val intent = Intent(context, DaftarFavorite::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Person, null) },
+                    label = { Text("Profil") },
+                    selected = false,
+                    onClick = {
+                        val intent = Intent(context, Profile::class.java)
+                        context.startActivity(intent)
+                    }
+                )
             }
         }
     ) { paddingValues ->
-        Column(modifier = Modifier
-            .padding(paddingValues)
-            .padding(16.dp)
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
         ) {
-            // Search bar
+            // Search Bar untuk pencarian nama resep
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = searchQuery.value,
+                onValueChange = { searchQuery.value = it }, // Update state ketika ada perubahan input
                 placeholder = { Text("Cari resep...") },
                 modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -151,7 +180,6 @@ fun ResepKitaApp(
                     }
                 }
             }
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -188,14 +216,21 @@ fun ResepKitaApp(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Grid daftar resep
+            // Grid daftar resep setelah difilter
             Text("Daftar Resep", fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            if(safeMakanan.isEmpty()){
-                CircularProgressIndicator()
-            }else {
+            if (filteredMakanan.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize() // Mengisi seluruh ruang
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center // Menempatkan indikator di tengah
+                ) {
+                    CircularProgressIndicator(color = Color(0xFFFFA726))
+                }
+            } else {
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -204,11 +239,14 @@ fun ResepKitaApp(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    items(safeMakanan) { item ->
-                        Card(
+                    items(filteredMakanan) { item ->
+                        val isFavorite =
+                            remember { mutableStateOf(false) } // Status favorit per item
 
+                        Card(
                             shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                         ) {
                             Column(modifier = Modifier.padding(8.dp)) {
                                 // Gambar placeholder
@@ -222,16 +260,16 @@ fun ResepKitaApp(
                                         .background(Color.Gray)
                                 )
 
-
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 Text(
                                     item.namaMakanan ?: "Tanpa Nama",
                                     fontWeight = FontWeight.SemiBold
                                 )
-                                Spacer(modifier = Modifier.height(15.dp))
-                                Row {
 
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                Row {
                                     Icon(
                                         Icons.Default.Star,
                                         contentDescription = null,
@@ -239,40 +277,54 @@ fun ResepKitaApp(
                                         modifier = Modifier.size(16.dp)
                                     )
                                     Text("4.5", color = Color.Gray)
-                                    Spacer(modifier = Modifier.width(80.dp))
-
+                                    Spacer(modifier = Modifier.width(20.dp))
                                     Icon(
-                                        Icons.Default.Favorite,
-
+                                        Icons.Default.Info,
+                                        contentDescription = null,
+                                        tint = Color.Blue,
                                         modifier = Modifier
                                             .size(16.dp)
                                             .clickable {
+                                                val intent = Intent(context, DetailMakanan::class.java)
+                                                intent.putExtra("id", item.idMakanan.toString())
+                                                context.startActivity(intent)
+                                            }
+                                    )
+                                    Spacer(modifier = Modifier.width(20.dp))
+
+                                    Icon(
+                                        Icons.Default.Favorite,
+                                        modifier = Modifier
+                                            .size(16.dp)
+                                            .clickable {
+                                                // Mengubah status favorit per item
+                                                isFavorite.value = !isFavorite.value
 
                                                 if (userid != null) {
-                                                    makananDisukai.WriteSuka(userid,
-                                                        item.thumbniail.toString(), item.namaMakanan.toString(), item.idMakanan.toString())
+                                                    makananDisukai.WriteSuka(
+                                                        userid,
+                                                        item.thumbniail.toString(),
+                                                        item.namaMakanan.toString(),
+                                                        item.idMakanan.toString()
+                                                    )
                                                 }
 
-                                                Toast.makeText(context, "Disukai", Toast.LENGTH_SHORT).show()
-
-
+                                                Toast.makeText(
+                                                    context,
+                                                    "Disukai",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             },
                                         contentDescription = null,
-
-
+                                        tint = if (isFavorite.value) Color.Red else Color.Gray // Warna per item
                                     )
                                 }
                             }
                         }
                     }
                 }
+
             }
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun Preview(){
-//    ResepKitaApp()
-//}

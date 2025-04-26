@@ -3,4 +3,6 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_daftar_makanan_page">DaftarMakananPage</string>
     <string name="title_activity_daftar_favorite">DaftarFavorite</string>
+    <string name="title_activity_detail_makanan">DetailMakanan</string>
+    <string name="title_activity_profile">Profile</string>
 </resources>

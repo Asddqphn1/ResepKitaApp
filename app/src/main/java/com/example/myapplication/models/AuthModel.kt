@@ -27,7 +27,7 @@ class AuthModel : ViewModel() {
     }
 
 
-    fun signUp(email : String, name: String, password : String, konfirmasiPassword : String, onResult: (Boolean,String?) -> Unit ){
+    fun signUp(email : String, name: String, password : String, konfirmasiPassword : String,lokasi : String, onResult: (Boolean,String?) -> Unit ){
         if (password != konfirmasiPassword){
             onResult(false, "Konfirmasi password salah")
             return
@@ -38,7 +38,7 @@ class AuthModel : ViewModel() {
                 if (it.isSuccessful){
 
                         val uid = it.result?.user?.uid
-                        val users = Users(uid,name,password,email)
+                        val users = Users(uid,name,password,email,lokasi)
                         if (uid != null) {
                             database.getReference("Users").child(uid).setValue(users)
                                 .addOnCompleteListener{task1 ->
