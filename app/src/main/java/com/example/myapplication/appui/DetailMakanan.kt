@@ -129,7 +129,7 @@ fun Detail(detailMakananView: DetailMakananView = viewModel(), idmakanan : Strin
                         Spacer(modifier = Modifier.width(20.dp))
                         Text(text = item.categoryMakanan.toString(), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                     }
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text("INGREDIENT")
                     Spacer(modifier = Modifier.height(15.dp))
                     // Menampilkan teks hanya jika item.gradientX tidak null atau tidak kosong
