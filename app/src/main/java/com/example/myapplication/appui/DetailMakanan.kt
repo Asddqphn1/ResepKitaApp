@@ -86,7 +86,7 @@ fun Detail(detailMakananView: DetailMakananView = viewModel(), idmakanan : Strin
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { androidx.compose.material.Text("Resep Favorite") },
+                title = { androidx.compose.material.Text("Detail resep") },
                 backgroundColor = Color(0xFFFFA726),
                 navigationIcon = {
                     IconButton(onClick = {
