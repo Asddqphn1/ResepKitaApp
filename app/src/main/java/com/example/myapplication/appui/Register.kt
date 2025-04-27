@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.appui
 
 
 import android.content.Intent
@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.R
 import com.example.myapplication.models.AuthModel
 
 

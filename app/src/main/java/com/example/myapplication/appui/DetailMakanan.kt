@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.appui
 
 import android.content.Intent
 import android.net.Uri
@@ -49,6 +49,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.myapplication.R
 
 import com.example.myapplication.viewmodels.DetailMakananView
 

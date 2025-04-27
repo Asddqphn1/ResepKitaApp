@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.appui
 
 import android.content.Intent
 import android.os.Bundle
@@ -52,7 +52,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.myapplication.firebase.FirebaseRepo
 import com.example.myapplication.models.ListFavorite
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

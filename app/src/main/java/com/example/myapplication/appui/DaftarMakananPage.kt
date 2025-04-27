@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.appui
 
 import android.content.Intent
 import android.os.Bundle
@@ -64,6 +64,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import coil.compose.AsyncImage
+import com.example.myapplication.R
 import com.example.myapplication.models.MakananDisukai
 import com.example.myapplication.viewmodels.DaftarMakananView
 import com.example.myapplication.viewmodels.FilterMakananView

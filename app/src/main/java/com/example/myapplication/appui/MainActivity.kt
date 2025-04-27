@@ -1,6 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.appui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -28,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
@@ -38,6 +36,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.R
 import com.example.myapplication.models.AuthModel
 
 class MainActivity : ComponentActivity() {
