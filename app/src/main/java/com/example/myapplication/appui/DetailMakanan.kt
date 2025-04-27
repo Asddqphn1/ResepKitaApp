@@ -114,7 +114,9 @@ fun Detail(detailMakananView: DetailMakananView = viewModel(), idmakanan : Strin
                             .fillMaxWidth()
                             .background(Color.Gray)
                     )
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text("From: ${item.negara}", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                    Spacer(modifier = Modifier.height(35.dp))
                     Text(text = item.namaMakanan.toString(), fontWeight = FontWeight.Bold, fontSize = 17.sp)
                     Row {
                         Icon(

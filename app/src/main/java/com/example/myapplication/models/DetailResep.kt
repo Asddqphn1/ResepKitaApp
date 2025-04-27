@@ -6,6 +6,7 @@ data class DetailResep(
     @SerializedName("strMeal") val namaMakanan : String?,
     @SerializedName("strCategory") val categoryMakanan : String?,
     @SerializedName("strInstructions") val perintah : String?,
+    @SerializedName("strArea") val negara : String?,
     @SerializedName("strMealThumb") val gambarMakanan : String?,
     @SerializedName("strYoutube") val linkYoutube : String?,
     @SerializedName("strIngredient1") val gradient1 : String?,

@@ -11,7 +11,7 @@ interface Apiservice {
     suspend fun getCategoriesMakanan() : ResponseMakan
 
     @GET("filter.php")
-    suspend fun getMakananByCatgory(@Query("c") kategori : String) : ResponseFilterMakanan
+    suspend fun getMakananByCatgory(@Query("c") kategori : String? = "Beef") : ResponseFilterMakanan
 
     @GET("lookup.php")
     suspend fun getDetailMakanan(@Query("i") id : String) : RsponseDetail
