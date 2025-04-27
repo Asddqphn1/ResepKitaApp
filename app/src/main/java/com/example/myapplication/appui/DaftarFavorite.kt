@@ -21,6 +21,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -28,7 +30,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -99,7 +105,47 @@ fun TampilFavorite(listFavorite: ListFavorite = viewModel()) {
                     }
                 }
             )
+        },
+        bottomBar = {
+            BottomNavigation(backgroundColor = Color(0xFFFFA726)) {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Home, null) },
+                    label = { Text("Beranda") },
+                    selected = true,
+                    onClick = {
+                        val intent = Intent(context, DaftarMakananPage::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Search, null) },
+                    label = { Text("Cari") },
+                    selected = false,
+                    onClick = {
+                        val intent = Intent(context, DaftarMakananPage::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Favorite, null) },
+                    label = { Text("Disukai") },
+                    selected = false,
+                    onClick = {
+
+                    }
+                )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Default.Person, null) },
+                    label = { Text("Profil") },
+                    selected = false,
+                    onClick = {
+                        val intent = Intent(context, Profile::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+            }
         }
+
     ) { paddingValues ->
 
         LazyColumn(
